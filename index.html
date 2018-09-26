@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Yupe search</title>
+</head>
+<body>
+	<input type="text" class="custom-search form-control">
+
+        <script>
+            var searchGet = null;
+
+            $('.custom-search').on('input', function() {
+                var q = $(this).val();
+
+                if (searchGet) {
+                    searchGet.abort();
+                }
+
+                searchGet = $.get('/store?q=' + encodeURIComponent(q)).done(function(responce) {
+                    var $responce = $(responce);
+                    var $finded = $responce.find('.product-vertical-wrapper');
+
+                    var finded = [];
+
+                    $finded.each(function(index, el) {
+                        var $item = $(el);
+
+                        finded.push({
+                            name: $item.find('.product-vertical__title').text(),
+                            link: $item.find('.product-vertical__title').attr('href'),
+                            price: $item.find('.product-price').text()
+                        });
+                    });
+
+                    console.log(finded);
+                })
+            })
+        </script>
+</body>
+</html>
